@@ -19,9 +19,9 @@
         "skipLibCheck": false,
         "forceConsistentCasingInFileNames": true,
         "declaration": true,
-        "types": [ "onejs-core" ]
+        "types": [ "onejs-core", "onejs-preact" ]
     },
-    "include": [ "src/**/*" ],
+    "include": [ "src/**/*", "src/jsx.d.ts" ],
     "exclude": [
         "node_modules",
         "dist",

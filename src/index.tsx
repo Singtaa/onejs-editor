@@ -1,12 +1,20 @@
-import { h } from "onejs-preact";
-import {  MeshRenderer, Component } from "UnityEngine";
+declare global {
+    export namespace JSX {
+        interface ColorField extends BaseField<Color> {
+            showEyeDropper?: boolean
+            showAlpha?: boolean
+            hdr?: boolean
+            gg?: boolean
+        }
 
-export function inspector<T extends Component>(type: { new(): T }, element: () => Element) {
-
+        interface IntrinsicElements {
+            colorfield: ColorField
+        }
+    }
+    export const ___engineHost: CS.OneJS.Editor.EditorEngineHost
 }
 
-inspector(MeshRenderer, () => {
-    return <div>
-        hh
-    </div>
-})
+export type IntrinsicElements = JSX.IntrinsicElements;
+
+export { inspector } from './inspector'
+export { window } from './editor-window'

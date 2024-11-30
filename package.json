@@ -1,9 +1,9 @@
 {
     "name": "onejs-editor",
     "description": "Provides editor UI functionalities for OneJS",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "main": "./dist/index.js",
-    "types": "./index.d.ts",
+    "types": "./dist/index.d.ts",
     "exports": {
         ".": "./dist/index.js"
     },
