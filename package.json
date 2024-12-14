@@ -1,14 +1,16 @@
 {
     "name": "onejs-editor",
     "description": "Provides editor UI functionalities for OneJS",
-    "version": "0.0.3",
+    "version": "0.0.9",
     "main": "./dist/index.js",
-    "types": "./dist/index.d.ts",
-    "exports": {
-        ".": "./dist/index.js"
+    "types": "./index.d.ts",
+    "scripts": {
+        "setup": "npm install && tsc -p tsconfig.json",
+        "switch": "node node_modules/onejs-core/scripts/switch.cjs",
+        "relink": "npm link onejs-core onejs-preact"
     },
     "dependencies": {
-        "onejs-core": "^0.3.25",
-        "onejs-preact": "^0.3.18"
+        "onejs-core": "^1.0.6",
+        "onejs-preact": "^1.0.0"
     }
 }

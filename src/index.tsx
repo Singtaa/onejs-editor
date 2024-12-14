@@ -11,10 +11,10 @@ declare global {
             colorfield: ColorField
         }
     }
-    export const ___engineHost: CS.OneJS.Editor.EditorEngineHost
 }
 
 export type IntrinsicElements = JSX.IntrinsicElements;
 
 export { inspector } from './inspector'
-export { window } from './editor-window'
+export { window } from './window'
+export { menu } from './menu'

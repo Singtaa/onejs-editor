@@ -14,27 +14,62 @@ declare namespace CS {
     // }
     // interface $Task<T> {}
     namespace OneJS.Editor {
+        class PairMappingDrawer extends UnityEditor.PropertyDrawer
+        {
+            protected [__keep_incompatibility]: never;
+            public constructor ()
+        }
+        class PlainStringDrawer extends UnityEditor.PropertyDrawer
+        {
+            protected [__keep_incompatibility]: never;
+            public constructor ()
+        }
         class BaseEditor extends UnityEditor.Editor implements UnityEditor.IToolModeOwner, UnityEditor.IPreviewable
         {
             protected [__keep_incompatibility]: never;
-            public static Register ($type: System.Type, $veMaker: System.Action$2<UnityEngine.UIElements.VisualElement, any>) : void
+            public static Instance : OneJS.Editor.BaseEditor
+            public static Register ($type: System.Type, $renderer: System.Action$3<UnityEngine.UIElements.VisualElement, any, UnityEditor.SerializedObject>) : void
             public static Clear () : void
+            public Refresh () : void
             public constructor ()
         }
-        class ElementRenderer extends System.Object
+        class EditorDocument extends System.Object implements OneJS.Dom.IDocument
         {
             protected [__keep_incompatibility]: never;
-            public static Register ($type: System.Type, $renderer: System.Action$1<UnityEngine.UIElements.VisualElement>) : void
-            public static Clear () : void
-            public static Has ($type: System.Type) : boolean
-            public static Get ($type: System.Type) : System.Action$1<UnityEngine.UIElements.VisualElement>
-            public static TryGet ($type: System.Type, $renderer: $Ref<System.Action$1<UnityEngine.UIElements.VisualElement>>) : boolean
-            public constructor ()
+            public Dispose () : void
+            public createElement ($tagName: string) : OneJS.Dom.Dom
+            public createElement ($tagName: string, $options: OneJS.Dom.ElementCreationOptions) : OneJS.Dom.Dom
+            public createElementNS ($ns: string, $tagName: string, $options: OneJS.Dom.ElementCreationOptions) : OneJS.Dom.Dom
+            public createTextNode ($text: string) : OneJS.Dom.Dom
+            public createTextNode ($text: string, $selectable: boolean) : OneJS.Dom.Dom
+            public ApplyRuntimeStyleSheets ($ve: UnityEngine.UIElements.VisualElement) : void
+            public addRuntimeUSS ($uss: string) : void
+            public BuildStyleSheet ($uss: string) : UnityEngine.UIElements.StyleSheet
+            public clearRuntimeStyleSheets () : void
+            public removeRuntimeStyleSheet ($uss: string) : void
+            public removeRuntimeStyleSheet ($sheet: UnityEngine.UIElements.StyleSheet) : void
+            public clearCache () : void
+            public loadRemoteImage ($url: string, $callback: System.Action$1<UnityEngine.Texture2D>) : UnityEngine.Coroutine
+            public loadImage ($path: string, $filterMode?: UnityEngine.FilterMode) : UnityEngine.Texture2D
+            public loadFont ($path: string) : UnityEngine.Font
+            public loadFontDefinition ($path: string) : UnityEngine.UIElements.FontDefinition
+            public AddCachingDom ($dom: OneJS.Dom.Dom) : void
+            public RemoveCachingDom ($dom: OneJS.Dom.Dom) : void
+            public static GenerateShortHash ($input: string) : string
+            public constructor ($scriptEngine: OneJS.IScriptEngine)
         }
-        class DynamicMenuHelper extends System.Object
+        class EditorEngineHost extends System.Object
         {
             protected [__keep_incompatibility]: never;
-            public static AddMenuItem ($name: string, $executeAction: System.Action, $priority: number, $shortcut?: string, $isChecked?: boolean) : void
+            public add_OnPreReload ($value: System.Action) : void
+            public remove_OnPreReload ($value: System.Action) : void
+            public add_OnPostReload ($value: System.Action) : void
+            public remove_OnPostReload ($value: System.Action) : void
+            public Dispose () : void
+            public Execute ($jsCode: string) : void
+            public SandboxExecute ($jsCode: string) : void
+            public Do ($setup: System.Action, $teardown: System.Action) : void
+            public constructor ($engine: OneJS.Editor.EditorScriptEngine)
         }
         class EditorScriptEngine extends UnityEngine.ScriptableObject implements OneJS.IScriptEngine
         {
@@ -42,67 +77,80 @@ declare namespace CS {
             public folderName : string
             public defaultFiles : System.Array$1<OneJS.DefaultFileMapping>
             public scriptEnginePrefab : OneJS.ScriptEngine
+            public editorStyleSheet : UnityEngine.UIElements.StyleSheet
             public packageJsonOverride : UnityEngine.TextAsset
             public tasksJsonOverride : UnityEngine.TextAsset
             public appJsOverride : UnityEngine.TextAsset
             public preloads : System.Array$1<UnityEngine.TextAsset>
             public globalObjects : System.Array$1<OneJS.ObjectMappingPair>
             public styleSheets : System.Array$1<UnityEngine.UIElements.StyleSheet>
+            public dtsGenerator : OneJS.DTSGenerator
+            public devMode : boolean
+            public extraLogging : boolean
+            public initialized : boolean
             public get WorkingDir(): string;
             public get ScriptFilePath(): string;
+            public get document(): OneJS.Editor.EditorDocument;
+            public add_OnPreReload ($value: System.Action) : void
+            public remove_OnPreReload ($value: System.Action) : void
+            public add_OnPostReload ($value: System.Action) : void
+            public remove_OnPostReload ($value: System.Action) : void
+            public Init () : void
+            public Dispose () : void
+            public Reload () : void
             public Run () : void
+            public Execute ($code: string) : void
+            public TryRender ($window: UnityEditor.EditorWindow) : boolean
+            public ApplyStyleSheets ($ve: UnityEngine.UIElements.VisualElement) : void
             public CreateInspectorVE ($filePath: string, $target: any) : UnityEngine.UIElements.VisualElement
             public constructor ()
-        }
-        class EditorEngineHost extends System.Object
-        {
-            protected [__keep_incompatibility]: never;
-            public Dispose () : void
-            public Execute ($jsCode: string) : void
-            public SandboxExecute ($jsCode: string) : void
-            public constructor ($engine: OneJS.Editor.EditorScriptEngine)
         }
         class EditorScriptEngineEditor extends UnityEditor.Editor implements UnityEditor.IToolModeOwner, UnityEditor.IPreviewable
         {
             protected [__keep_incompatibility]: never;
             public constructor ()
         }
+        class RendererWrapper extends System.Object
+        {
+            protected [__keep_incompatibility]: never;
+            public type : System.Type
+            public render : System.Action$1<UnityEditor.EditorWindow>
+            public window : UnityEditor.EditorWindow
+            public engine : OneJS.Editor.EditorScriptEngine
+            public constructor ()
+        }
+        class ElementRenderer extends System.Object
+        {
+            protected [__keep_incompatibility]: never;
+            public static Register ($type: System.Type, $render: System.Action$1<UnityEditor.EditorWindow>) : void
+            public static Clear () : void
+            public static RefreshAll () : void
+            public Refresh ($type: System.Type) : void
+            public static TryRender ($window: UnityEditor.EditorWindow, $engine: OneJS.Editor.EditorScriptEngine) : boolean
+            public constructor ()
+        }
+        class DynamicMenuHelper extends System.Object
+        {
+            protected [__keep_incompatibility]: never;
+            public static AddMenuItem ($name: string, $executeAction: System.Action, $priority?: number, $shortcut?: string, $isChecked?: boolean) : void
+            public static ClearAllMenuItems () : void
+        }
+        class OneJSEditorWindow extends UnityEditor.EditorWindow
+        {
+            protected [__keep_incompatibility]: never;
+            public add_OnTeardown ($value: System.Action) : void
+            public remove_OnTeardown ($value: System.Action) : void
+            public constructor ()
+        }
+        class TabCreator extends System.Object
+        {
+            protected [__keep_incompatibility]: never;
+            public CreateNewTab () : UnityEditor.EditorWindow
+            public constructor ()
+        }
         class BundlerEditor extends UnityEditor.Editor implements UnityEditor.IToolModeOwner, UnityEditor.IPreviewable
         {
             protected [__keep_incompatibility]: never;
-            public constructor ()
-        }
-        class DTSGeneratorEditor extends UnityEditor.Editor implements UnityEditor.IToolModeOwner, UnityEditor.IPreviewable
-        {
-            protected [__keep_incompatibility]: never;
-            public Generate () : void
-            public constructor ()
-        }
-        class NamespaceNode extends System.Object
-        {
-            protected [__keep_incompatibility]: never;
-            public get Name(): string;
-            public set Name(value: string);
-            public get FullName(): string;
-            public set FullName(value: string);
-            public get Children(): System.Collections.Generic.List$1<OneJS.Editor.NamespaceNode>;
-            public get FullContent(): string;
-            public set FullContent(value: string);
-            public get IndentLevel(): number;
-            public set IndentLevel(value: number);
-            public constructor ()
-        }
-        class NamespaceTreeParser extends System.Object
-        {
-            protected [__keep_incompatibility]: never;
-            public static ParseNamespaces ($tsDefs: string) : OneJS.Editor.NamespaceNode
-            public static PrintNamespaceTree ($node: OneJS.Editor.NamespaceNode, $indent?: number) : void
-            public constructor ()
-        }
-        class NamespaceTreeFilter extends System.Object
-        {
-            protected [__keep_incompatibility]: never;
-            public static FilterNamespaces ($root: OneJS.Editor.NamespaceNode, $namespacesToKeep: System.Array$1<string>) : string
             public constructor ()
         }
         class RunnerEditor extends UnityEditor.Editor implements UnityEditor.IToolModeOwner, UnityEditor.IPreviewable
@@ -131,7 +179,40 @@ declare namespace CS {
             public static Generate ($types: System.Array$1<System.Type>, $strictAssemblies: System.Array$1<System.Reflection.Assembly>) : string
             public static Generate ($types: System.Array$1<System.Type>, $strictAssemblies: System.Array$1<System.Reflection.Assembly>, $strictNamespaces: System.Array$1<string>) : string
             public static Generate ($types: System.Array$1<System.Type>, $exact: boolean, $strictAssemblies: System.Array$1<System.Reflection.Assembly>, $strictNamespaces: System.Array$1<string>) : string
-            public static Generate ($genInfo: OneJS.Editor.Generator.DTS.TypingGenInfo) : string
+            public static Generate ($genInfo: any) : string
+            public constructor ()
+        }
+        class DTSGeneratorEditor extends System.Object
+        {
+            protected [__keep_incompatibility]: never;
+            public Generate ($globals: System.Array$1<OneJS.ObjectMappingPair>, $workingDir: string) : void
+            public constructor ($dtsGenerator: OneJS.DTSGenerator)
+        }
+        class NamespaceNode extends System.Object
+        {
+            protected [__keep_incompatibility]: never;
+            public get Name(): string;
+            public set Name(value: string);
+            public get FullName(): string;
+            public set FullName(value: string);
+            public get Children(): System.Collections.Generic.List$1<OneJS.Editor.NamespaceNode>;
+            public get FullContent(): string;
+            public set FullContent(value: string);
+            public get IndentLevel(): number;
+            public set IndentLevel(value: number);
+            public constructor ()
+        }
+        class NamespaceTreeParser extends System.Object
+        {
+            protected [__keep_incompatibility]: never;
+            public static ParseNamespaces ($tsDefs: string) : OneJS.Editor.NamespaceNode
+            public static PrintNamespaceTree ($node: OneJS.Editor.NamespaceNode, $indent?: number) : void
+            public constructor ()
+        }
+        class NamespaceTreeFilter extends System.Object
+        {
+            protected [__keep_incompatibility]: never;
+            public static FilterNamespaces ($root: OneJS.Editor.NamespaceNode, $namespacesToKeep: System.Array$1<string>) : string
             public constructor ()
         }
         class TypeCollector extends System.Object
@@ -152,107 +233,11 @@ declare namespace CS {
             protected [__keep_incompatibility]: never;
             public constructor ()
         }
-        class PairMappingDrawer extends UnityEditor.PropertyDrawer
-        {
-            protected [__keep_incompatibility]: never;
-            public constructor ()
-        }
-        class PlainStringDrawer extends UnityEditor.PropertyDrawer
-        {
-            protected [__keep_incompatibility]: never;
-            public constructor ()
-        }
         class OneJSEditorUtil extends System.Object
         {
             protected [__keep_incompatibility]: never;
             public static OpenDir ($path: string) : void
             public static VSCodeOpenDir ($path: string) : void
-            public constructor ()
-        }
-    }
-    namespace OneJS.Editor.Generator.DTS {
-        class TypingGenInfo extends System.Object
-        {
-            protected [__keep_incompatibility]: never;
-            public NamespaceInfos : System.Array$1<OneJS.Editor.Generator.DTS.TsNamespaceGenInfo>
-            public TaskDef : string
-            public static FromTypes ($types: System.Collections.Generic.IEnumerable$1<System.Type>) : OneJS.Editor.Generator.DTS.TypingGenInfo
-            public constructor ()
-        }
-        class TsNamespaceGenInfo extends System.Object
-        {
-            protected [__keep_incompatibility]: never;
-            public Name : string
-            public Types : System.Array$1<OneJS.Editor.Generator.DTS.TsTypeGenInfo>
-            public constructor ()
-        }
-        class TsTypeGenInfo extends System.Object
-        {
-            protected [__keep_incompatibility]: never;
-            public CSharpType : System.Type
-            public Name : string
-            public Document : string
-            public Methods : System.Array$1<OneJS.Editor.Generator.DTS.TsMethodGenInfo>
-            public Properties : System.Array$1<OneJS.Editor.Generator.DTS.TsPropertyGenInfo>
-            public IsGenericTypeDefinition : boolean
-            public GenericParameters : System.Array$1<string>
-            public IsDelegate : boolean
-            public DelegateDef : string
-            public IsInterface : boolean
-            public IteratorReturnName : string
-            public Namespace : string
-            public BaseType : OneJS.Editor.Generator.DTS.TsTypeGenInfo
-            public interfaces : System.Array$1<OneJS.Editor.Generator.DTS.TsTypeGenInfo>
-            public IsEnum : boolean
-            public EnumKeyValues : string
-            public ExtensionMethods : System.Array$1<OneJS.Editor.Generator.DTS.TsMethodGenInfo>
-            public IsCheckOk : boolean
-            public get FullName(): string;
-            public static FromType ($type: System.Type, $genTypeSet: any) : OneJS.Editor.Generator.DTS.TsTypeGenInfo
-            public constructor ()
-        }
-        class TsParameterGenInfo extends System.Object
-        {
-            protected [__keep_incompatibility]: never;
-            public Name : string
-            public IsByRef : boolean
-            public TypeName : string
-            public IsParams : boolean
-            public IsOptional : boolean
-            public static FromParameterInfo ($parameterInfo: System.Reflection.ParameterInfo, $isGenericTypeDefinition: boolean) : OneJS.Editor.Generator.DTS.TsParameterGenInfo
-            public constructor ()
-        }
-        class TsMethodGenInfoComparer extends System.Object implements System.Collections.Generic.IEqualityComparer$1<OneJS.Editor.Generator.DTS.TsMethodGenInfo>
-        {
-            protected [__keep_incompatibility]: never;
-            // public Equals ($x: OneJS.Editor.Generator.DTS.TsMethodGenInfo, $y: OneJS.Editor.Generator.DTS.TsMethodGenInfo) : boolean
-            // public GetHashCode ($obj: OneJS.Editor.Generator.DTS.TsMethodGenInfo) : number
-            public constructor ()
-        }
-        class TsMethodGenInfo extends System.Object
-        {
-            protected [__keep_incompatibility]: never;
-            public Name : string
-            public Document : string
-            public ParameterInfos : System.Array$1<OneJS.Editor.Generator.DTS.TsParameterGenInfo>
-            public TypeName : string
-            public IsConstructor : boolean
-            public IsStatic : boolean
-            public static FromMethodBase ($methodBase: System.Reflection.MethodBase, $isGenericTypeDefinition: boolean, $skipExtentionMethodThis: boolean) : OneJS.Editor.Generator.DTS.TsMethodGenInfo
-            public static FromType ($type: System.Type, $genTypeSet: any) : System.Array$1<OneJS.Editor.Generator.DTS.TsMethodGenInfo>
-            public static FromTsGenTypeInfos ($tsGenTypeInfos: System.Collections.Generic.Dictionary$2<string, OneJS.Editor.Generator.DTS.TsTypeGenInfo>, $info: OneJS.Editor.Generator.DTS.TsTypeGenInfo, $getBaseMethods: boolean) : System.Array$1<OneJS.Editor.Generator.DTS.TsMethodGenInfo>
-            public constructor ()
-        }
-        class TsPropertyGenInfo extends System.Object
-        {
-            protected [__keep_incompatibility]: never;
-            public Name : string
-            public Document : string
-            public TypeName : string
-            public IsStatic : boolean
-            public HasGetter : boolean
-            public HasSetter : boolean
-            public static FromTsTypeGenInfo ($tsGenTypeInfos: System.Collections.Generic.Dictionary$2<string, OneJS.Editor.Generator.DTS.TsTypeGenInfo>, $info: OneJS.Editor.Generator.DTS.TsTypeGenInfo, $getBaseMethods: boolean) : System.Array$1<OneJS.Editor.Generator.DTS.TsPropertyGenInfo>
             public constructor ()
         }
     }
