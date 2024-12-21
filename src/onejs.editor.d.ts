@@ -33,6 +33,18 @@ declare namespace CS {
             public Refresh () : void
             public constructor ()
         }
+        class WeakSet$1<T> extends System.Object implements System.Collections.Generic.IEnumerable$1<T>, System.Collections.IEnumerable
+        {
+            protected [__keep_incompatibility]: never;
+            public get Count(): number;
+            public Add ($item: T) : void
+            public Contains ($item: T) : boolean
+            public Remove ($item: T) : void
+            public Clear () : void
+            public GetEnumerator () : System.Collections.Generic.IEnumerator$1<T>
+            public constructor ()
+            public [Symbol.iterator]() : IterableIterator<T>
+        }
         class EditorDocument extends System.Object implements OneJS.Dom.IDocument
         {
             protected [__keep_incompatibility]: never;
@@ -58,20 +70,21 @@ declare namespace CS {
             public static GenerateShortHash ($input: string) : string
             public constructor ($scriptEngine: OneJS.IScriptEngine)
         }
-        class EditorEngineHost extends System.Object
+        class EditorEngineHost extends System.Object implements System.IDisposable, OneJS.IEngineHost
         {
             protected [__keep_incompatibility]: never;
-            public add_OnPreReload ($value: System.Action) : void
-            public remove_OnPreReload ($value: System.Action) : void
-            public add_OnPostReload ($value: System.Action) : void
-            public remove_OnPostReload ($value: System.Action) : void
+            public add_onReload ($value: System.Action) : void
+            public remove_onReload ($value: System.Action) : void
+            public add_onDispose ($value: System.Action) : void
+            public remove_onDispose ($value: System.Action) : void
             public Dispose () : void
+            public DoReload () : void
             public Execute ($jsCode: string) : void
+            public RegisterRenderer ($type: System.Type, $render: System.Action$2<UnityEngine.Object, UnityEngine.UIElements.VisualElement>) : void
             public SandboxExecute ($jsCode: string) : void
-            public Do ($setup: System.Action, $teardown: System.Action) : void
             public constructor ($engine: OneJS.Editor.EditorScriptEngine)
         }
-        class EditorScriptEngine extends UnityEngine.ScriptableObject implements OneJS.IScriptEngine
+        class EditorScriptEngine extends UnityEngine.ScriptableObject implements OneJS.IScriptEngine, System.IDisposable
         {
             protected [__keep_incompatibility]: never;
             public folderName : string
@@ -91,16 +104,17 @@ declare namespace CS {
             public get WorkingDir(): string;
             public get ScriptFilePath(): string;
             public get document(): OneJS.Editor.EditorDocument;
-            public add_OnPreReload ($value: System.Action) : void
-            public remove_OnPreReload ($value: System.Action) : void
-            public add_OnPostReload ($value: System.Action) : void
-            public remove_OnPostReload ($value: System.Action) : void
+            public get jsEnv(): Puerts.JsEnv;
+            public add_OnReload ($value: System.Action) : void
+            public remove_OnReload ($value: System.Action) : void
+            public add_OnDispose ($value: System.Action) : void
+            public remove_OnDispose ($value: System.Action) : void
             public Init () : void
             public Dispose () : void
             public Reload () : void
             public Run () : void
             public Execute ($code: string) : void
-            public TryRender ($window: UnityEditor.EditorWindow) : boolean
+            public RegisterRenderer ($type: System.Type, $render: System.Action$2<UnityEngine.Object, UnityEngine.UIElements.VisualElement>) : void
             public ApplyStyleSheets ($ve: UnityEngine.UIElements.VisualElement) : void
             public CreateInspectorVE ($filePath: string, $target: any) : UnityEngine.UIElements.VisualElement
             public constructor ()
@@ -127,6 +141,25 @@ declare namespace CS {
             public static RefreshAll () : void
             public Refresh ($type: System.Type) : void
             public static TryRender ($window: UnityEditor.EditorWindow, $engine: OneJS.Editor.EditorScriptEngine) : boolean
+            public constructor ()
+        }
+        class RendererInfo extends System.Object
+        {
+            protected [__keep_incompatibility]: never;
+            public type : System.Type
+            public render : System.Action$1<UnityEngine.UIElements.VisualElement>
+            public engine : OneJS.Editor.EditorScriptEngine
+            public roots : OneJS.Editor.WeakSet$1<UnityEngine.UIElements.VisualElement>
+            public constructor ()
+        }
+        class RendererRegistry extends System.Object implements System.IDisposable
+        {
+            protected [__keep_incompatibility]: never;
+            public Dispose () : void
+            public Register ($type: System.Type, $render: System.Action$1<UnityEngine.UIElements.VisualElement>) : void
+            public GetRendererInfo ($type: System.Type) : OneJS.Editor.RendererInfo
+            public TryGetRendererInfo ($type: System.Type, $renderer: $Ref<OneJS.Editor.RendererInfo>) : boolean
+            public ReRenderAll () : void
             public constructor ()
         }
         class DynamicMenuHelper extends System.Object
