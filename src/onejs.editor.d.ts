@@ -82,6 +82,8 @@ declare namespace CS {
             public Execute ($jsCode: string) : void
             public RegisterRenderer ($type: System.Type, $render: System.Action$2<UnityEngine.Object, UnityEngine.UIElements.VisualElement>) : void
             public SandboxExecute ($jsCode: string) : void
+            public ApplyStyleSheets ($ve: UnityEngine.UIElements.VisualElement) : void
+            public teardown ($action: System.Action) : void
             public constructor ($engine: OneJS.Editor.EditorScriptEngine)
         }
         class EditorScriptEngine extends UnityEngine.ScriptableObject implements OneJS.IScriptEngine, System.IDisposable
@@ -141,6 +143,18 @@ declare namespace CS {
             public static RefreshAll () : void
             public Refresh ($type: System.Type) : void
             public static TryRender ($window: UnityEditor.EditorWindow, $engine: OneJS.Editor.EditorScriptEngine) : boolean
+            public constructor ()
+        }
+        class InspectorEditor extends UnityEditor.Editor implements UnityEditor.IPreviewable, UnityEditor.IToolModeOwner
+        {
+            protected [__keep_incompatibility]: never;
+            public engine : OneJS.Editor.EditorScriptEngine
+            public inspectorUSS : UnityEngine.UIElements.StyleSheet
+        }
+        class ScratchpadWindow extends UnityEditor.EditorWindow
+        {
+            protected [__keep_incompatibility]: never;
+            public static Get ($name: string, $focus?: boolean) : OneJS.Editor.ScratchpadWindow
             public constructor ()
         }
         class RendererInfo extends System.Object
