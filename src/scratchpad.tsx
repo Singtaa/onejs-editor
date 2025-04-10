@@ -21,6 +21,12 @@ const Holder = ({ children }: any) => {
     </div>
 }
 
+/**
+ * Creates a scratchpad window with a unique name and renders the provided JSX element inside it.
+ * @param name Name of the scratchpad window, should be unique
+ * @param Elem JSX function to render the scratchpad content
+ * @param focus Force focus on the window when this function is called
+ */
 export function scratchpad(name: string, Elem: ({ window }: ScratchpadProps) => VNode<any>, focus: boolean = false) {
     var scratchpadWindow = CS.OneJS.Editor.ScratchpadWindow.Get(name, focus)
     ___engineHost.ApplyStyleSheets(scratchpadWindow.rootVisualElement)
