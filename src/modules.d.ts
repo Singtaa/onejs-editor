@@ -1,3 +1,3 @@
-// declare module "UnityEditor" {
-//     export = CS.UnityEditor;
-// }
+declare module "UnityEditor" {
+    export = CS.UnityEditor;
+}
