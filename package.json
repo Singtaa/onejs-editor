@@ -1,7 +1,7 @@
 {
     "name": "onejs-editor",
     "description": "Provides editor UI functionalities for OneJS",
-    "version": "0.0.19",
+    "version": "0.0.20",
     "main": "./dist/index.js",
     "types": "./index.d.ts",
     "scripts": {
@@ -10,7 +10,7 @@
         "relink": "npm link onejs-core onejs-preact"
     },
     "dependencies": {
-        "onejs-core": "^1.0.6",
-        "onejs-preact": "^1.0.0"
+        "onejs-core": "^2.0.0",
+        "onejs-preact": "^2.0.0"
     }
 }

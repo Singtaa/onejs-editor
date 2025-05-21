@@ -97,4 +97,4 @@ export { menu } from './menu'
 export { register, RegisterProps } from './register'
 export { scratchpad } from './scratchpad'
 
-puer.$extension(CS.UnityEngine.UIElements.VisualElement, CS.UnityEditor.UIElements.BindingExtensions)
+// puer.$extension(CS.UnityEngine.UIElements.VisualElement, CS.UnityEditor.UIElements.BindingExtensions)
